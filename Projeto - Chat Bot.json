@@ -1,0 +1,1420 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "next": "Apresentacao",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "name": "Apresentacao",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_apresentacao",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 200
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Oie, aqui é a Tropicale Ateliê✨ Como eu posso te ajudar hoje?\n\n1 - Quero dicas de presente \n2 - Como cuidar das minhas peças\n3 - Quero conhecer a loja\n4 - Troca ou Devolução\n5 - Só necessito falar com a atendente",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "split_apresentacao",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_Apresentacao",
+          "event": "noMatch"
+        },
+        {
+          "next": "sr_0_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, dicas, quero dicas de presente, presente, quero dicas, dica"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, cuidar das peças, cuidado, cuidados, como cuidar das minhas peças, como cuidar das peças"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_3",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "3",
+              "arguments": ["{{widgets.Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "3, tres, conhecer a loja, quero conhecer a loja, conhecer"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_4",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "4",
+              "arguments": ["{{widgets.Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "4, quatro, troca, devolução, troca e devolução, trocar, devolver"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "5",
+              "arguments": ["{{widgets.Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "5, cinco, atendente, so necessito falar com a atendente, falar com atendente"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Apresentacao.inbound.Body}}",
+        "offset": {
+          "x": -10,
+          "y": 430
+        }
+      }
+    },
+    {
+      "name": "sr_0_1",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_1",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -910,
+          "y": 690
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Perfeito! E quanto você ta pensando em gastar?\n\n1 - Um mais em conta, por favor 🥺\n2 - Pode caprichar bem 🤩",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "sr_0_2",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_2",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -250,
+          "y": 690
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "*Para garantir a qualidade máxima de suas peças de aço inoxidável, separamos essas dicas pra você:*\n • Retire as peças antes do banho diário ou ao entrar no mar ou piscina ou na prática de atividades físicas;\n • Evite o contato das peças com materiais de limpeza;\n • O armazenamento das peças deve ser feito em local limpo e seco;\n • Ao utilizar cremes ou perfumes, aguarde a absorção desses antes de usar peças de banho dourado.\n\nSe ficou alguma dúvida, gostaria de falar com nossos atendentes?\n\n1 - Não, pode deixar que eu entendi tudo 😉\n2 - Sim, ainda não entendi 😰",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "sr_0_3",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_3",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 80,
+          "y": 690
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Somos um e-commerce de semijoias e acessórios, trabalhamos com aço cirúrgico 316L, que é um metal antialérgico para a maioria das pessoas. Este metal não oxida, não descasca, não escurece, permitindo o contato com a água salgada e maresia, por isso, pode aproveitar seu verão, seu dia de praia ou até mesmo no dia a dia, sem se preocupar. É um metal que possui uma manutenção simples: basta lavar com sabão neutro e água (doce) e secar com uma flanela limpa e seca, tudo né? 🤩\n\nFicou alguma dúvida?\n\n1 - Não, entendi tudinho 😉\n2 - Preciso de ajuda 😭",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "sr_0_4",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_4",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 740,
+          "y": 690
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Você realizou uma compra na Tropicale Ateliê e o produto que recebeu não atingiu suas expectativas, não serviu ou apresentou algum defeito de fabricação? Não se preocupe, nós podemos te ajudar! Qual seria o seu caso?\n\n1 - Troca por desistência, insatisfação ou arrependimento\n\n2 - Troca por defeito",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "split_0_1",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_1",
+          "event": "noMatch"
+        },
+        {
+          "next": "sr_0_1_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_1.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, mais em conta, um mais em conta por favor"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_1_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_1.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, caprichar, caro, pode caprichar bem"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_1.inbound.Body}}",
+        "offset": {
+          "x": -910,
+          "y": 910
+        }
+      }
+    },
+    {
+      "name": "split_0_2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, não pode deixar que eu entendi, entendi"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, sim, s, ss, ainda não entendi, não entendi"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_2.inbound.Body}}",
+        "offset": {
+          "x": -250,
+          "y": 910
+        }
+      }
+    },
+    {
+      "name": "split_0_3",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_3",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_3.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, não entendi tudinho, entendi tudinho, entendi"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_3_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_3.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, preciso de ajuda, ajuda, quero ajuda"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_3.inbound.Body}}",
+        "offset": {
+          "x": 80,
+          "y": 910
+        }
+      }
+    },
+    {
+      "name": "split_0_4",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_4",
+          "event": "noMatch"
+        },
+        {
+          "next": "sr_0_4_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_4.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, troca por desistencia, troca por desistência, troca por insatisfacao, troca por insatisfação, troca por arrependimento, desistencia, insatifacao, insatisfação, arrependimento"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_4_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_4.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, troca por defeito, defeito"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_4.inbound.Body}}",
+        "offset": {
+          "x": 740,
+          "y": 910
+        }
+      }
+    },
+    {
+      "name": "sr_0_1_1",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_1_1",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1240,
+          "y": 1130
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "https://tropicaleatelie.com/product/produto-2/\n\nEscolhi especialmente pra você arrasar na hora de presentear alguém especial ou se presentear, sem sair do orçamento 🥰\n\nPosso ajudar em mais alguma coisa?\n\n1- Não, tudo perfeito!\n2 - Voltar para o menu inicial",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "sr_0_1_2",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_1_2",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -910,
+          "y": 1130
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "https://tropicaleatelie.com/product/produto-1/\n\nComo prometido, está aqui a sua mais nova aquisição, para presentear aquela pessoal mega especial ou ter os seus recebidinhos pagos desse mês né 😜\n\nPosso ajudar em mais alguma coisa?\n1- Não, tudo perfeito!\n2 - Voltar para o menu inicial",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "sr_0_3_2",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_3_2",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 410,
+          "y": 1130
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Ah já sei! Você gostaria de voltar no menu inicial? Ou prefere falar com uma atendente?\n\n1 - Menu Inicial\n2 - Falar com atendente",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "sr_0_4_1",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_4_1",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 740,
+          "y": 1130
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "*Troca por desistência, insatisfação ou arrependimento*\nO cliente tem o prazo de até 7 dias corridos após o recebimento da mercadoria para solicitar a devolução, devendo obrigatoriamente, o produto não apresentar sinais de uso (manchas e odores), devendo estar em perfeitas condições.\nAs despesas de envio por troca de desistência, insatisfação ou arrependimento são responsabilidade do cliente.\n\nFicou alguma dúvida?\n\n1 - Não, está tudo perfeito 😌\n2 - Sim, quero falar com alguém 😔",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "Atendimento",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 80,
+          "y": 1630
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Pode deixar, você ja vai ser atendida 🥰"
+      }
+    },
+    {
+      "name": "sr_0_4_2",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_0_4_2",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1070,
+          "y": 1130
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "*Troca por defeito*\nCaso você receba alguma peça com defeito de fabricação ou avaria devido ao transporte, deverá nos informar pelo e-mail *contato@tropicaleatelie.com*, em até 30 dias corridos do recebimento do pedido.\nSendo o defeito aparente, o produto não poderá apresentar sinais de uso. As despesas de frete em caso de defeito ou avaria serão de responsabilidade da empresa.\nO prazo para realizar o envio de um novo produto é de 7 dias úteis após a confirmação do defeito por parte da equipe.\n\nFicou alguma dúvida?\n\n1 - Não, está tudo perfeito 😌\n2 - Sim, quero falar com alguém 😔",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "split_0_1_1",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_split_0_1_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_1_1.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, tudo perfeito, nao tudo perfeito, não tudo perfeito"
+            }
+          ]
+        },
+        {
+          "next": "Apresentacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_1_1.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, menu inicial, menu"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_1_1.inbound.Body}}",
+        "offset": {
+          "x": -1240,
+          "y": 1350
+        }
+      }
+    },
+    {
+      "name": "split_0_3_2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_3_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Apresentacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_3_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, menu inicial, menu"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_3_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, atendente, falar com atendente"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_3_2.inbound.Body}}",
+        "offset": {
+          "x": 410,
+          "y": 1350
+        }
+      }
+    },
+    {
+      "name": "split_0_4_1",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_4_1-2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_4_1.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, tudo perfeito, nao tudo perfeito, não tudo perfeito"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_4_1.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, sim, quero falar com alguem, falar com alguem, atendente, falar com atendente"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_4_1.inbound.Body}}",
+        "offset": {
+          "x": 740,
+          "y": 1350
+        }
+      }
+    },
+    {
+      "name": "Finalizacao",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 410,
+          "y": 1630
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Certo, se precisar de mais alguma coisa, pode nos chamar, estaremos sempre a disposição 🥰"
+      }
+    },
+    {
+      "name": "sem_resposta",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -250,
+          "y": 1630
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Está ocupada agora? Sem problemas! pode nos chamar quando quiser, estaremos a disposição 😉"
+      }
+    },
+    {
+      "name": "Erro_Apresentacao",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "Erro_split_apresentacao",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 340,
+          "y": 200
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Não entendi bem, poderia escolher um dos números abaixo para prosseguir com o atendimento: \n\n1 - Quero dicas de presente \n2 - Como cuidar das minhas peças\n3 - Quero conhecer a loja\n4 - Troca ou Devolução\n5 - Só necessito falar com a atendente",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "Erro_sr_0_1",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "Erro_split_0_1",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1240,
+          "y": 690
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Não entendi, poderia escolher entre os números quanto você pretende gastar?\n\n1 - Um mais em conta, por favor 🥺\n2 - Pode caprichar bem 🤩",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "Erro_split_apresentacao",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_Apresentacao",
+          "event": "noMatch"
+        },
+        {
+          "next": "sr_0_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Erro_Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, dicas, quero dicas de presente, presente, quero dicas, dica"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Erro_Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, cuidar das peças, cuidado, cuidados, como cuidar das minhas peças, como cuidar das peças"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_3",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "3",
+              "arguments": ["{{widgets.Erro_Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "3, tres, conhecer a loja, quero conhecer a loja, conhecer"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_4",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "4",
+              "arguments": ["{{widgets.Erro_Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "4, quatro, troca, devolução, troca e devolução, trocar, devolver"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "5",
+              "arguments": ["{{widgets.Erro_Apresentacao.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "5, cinco, atendente, so necessito falar com a atendente, falar com atendente"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Erro_Apresentacao.inbound.Body}}",
+        "offset": {
+          "x": 360,
+          "y": 430
+        }
+      }
+    },
+    {
+      "name": "Erro_sr_0_2",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "Erro_split_0_2",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -580,
+          "y": 690
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Não entendi, por gentileza, coloque os números correspondentes para responder essa questão.\n\nFicou alguma dúvida, gostaria de falar com nossos atendentes?\n\n1 - Não, pode deixar que eu entendi tudo 😉\n2 - Sim, ainda não entendi 😰",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "Erro_sr_0_3",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "Erro_split_0_3",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 410,
+          "y": 690
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Não entendi. Por gentileza, coloque os números correspondentes para responder essa questão. \n\nFicou alguma dúvida?\n\n1 - Não, entendi tudinho 😉\n2 - Preciso de ajuda 😭",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "Erro_sr_0_4",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "Erro_split_0_4",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1070,
+          "y": 690
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Não entendi. Por gentileza, coloque os números correspondentes para responder essa questão.  \n\nQual seria o seu caso para troca ou devolução?\n\n1 - Troca por desistência, insatisfação ou arrependimento\n\n2 - Troca por defeito",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "split_0_4_2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_4_1-2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_4_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, tudo perfeito, nao tudo perfeito, não tudo perfeito"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_4_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, sim, quero falar com alguem, falar com alguem, atendente, falar com atendente"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_4_2.inbound.Body}}",
+        "offset": {
+          "x": 1070,
+          "y": 1350
+        }
+      }
+    },
+    {
+      "name": "split_0_1_2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_split_0_1_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.sr_0_1_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, tudo perfeito, nao tudo perfeito, não tudo perfeito"
+            }
+          ]
+        },
+        {
+          "next": "Apresentacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.sr_0_1_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, menu inicial, menu"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sr_0_1_2.inbound.Body}}",
+        "offset": {
+          "x": -910,
+          "y": 1350
+        }
+      }
+    },
+    {
+      "name": "Erro_split_0_3",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_3",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Erro_sr_0_3.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, não entendi tudinho, entendi tudinho, entendi"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_3_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Erro_sr_0_3.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, preciso de ajuda, ajuda, quero ajuda"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Erro_sr_0_3.inbound.Body}}",
+        "offset": {
+          "x": 410,
+          "y": 910
+        }
+      }
+    },
+    {
+      "name": "Erro_split_0_1",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_1",
+          "event": "noMatch"
+        },
+        {
+          "next": "sr_0_1_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Erro_sr_0_1.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, mais em conta, um mais em conta por favor"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_1_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Erro_sr_0_1.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, caprichar, caro, pode caprichar bem"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Erro_sr_0_1.inbound.Body}}",
+        "offset": {
+          "x": -1240,
+          "y": 910
+        }
+      }
+    },
+    {
+      "name": "Erro_split_0_4",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_4",
+          "event": "noMatch"
+        },
+        {
+          "next": "sr_0_4_1",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Erro_sr_0_4.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, troca por desistencia, troca por desistência, troca por insatisfacao, troca por insatisfação, troca por arrependimento, desistencia, insatifacao, insatisfação, arrependimento"
+            }
+          ]
+        },
+        {
+          "next": "sr_0_4_2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Erro_sr_0_4.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, troca por defeito, defeito"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Erro_sr_0_4.inbound.Body}}",
+        "offset": {
+          "x": 1070,
+          "y": 910
+        }
+      }
+    },
+    {
+      "name": "Erro_split_0_2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Erro_sr_0_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, não pode deixar que eu entendi, entendi"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Erro_sr_0_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, sim, s, ss, ainda não entendi, não entendi"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Erro_sr_0_2.inbound.Body}}",
+        "offset": {
+          "x": -580,
+          "y": 910
+        }
+      }
+    },
+    {
+      "name": "Erro_sr_0_4_1-2",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "Erro_split_0_4_1",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1400,
+          "y": 1130
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Me desculpe, não entendi. Por gentileza, coloque os números correspondentes para responder essa questão. \n\nFicou alguma dúvida referente a troca?\n\n1 - Não, está tudo perfeito 😌\n2 - Sim, quero falar com alguém 😔",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "Erro_split_0_4_1",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_4_1-2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Erro_sr_0_4_1-2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, tudo perfeito, nao tudo perfeito, não tudo perfeito"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Erro_sr_0_4_1-2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, sim, quero falar com alguem, falar com alguem, atendente, falar com atendente"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Erro_sr_0_4_1-2.inbound.Body}}",
+        "offset": {
+          "x": 1400,
+          "y": 1350
+        }
+      }
+    },
+    {
+      "name": "Erro_sr_0_3_2",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "Erro_split_0_3_2",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 80,
+          "y": 1130
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Me desculpe, não entendi. Por gentileza, coloque os números correspondentes para responder essa questão.  \n\nVocê gostaria de voltar no menu inicial? Ou prefere falar com uma atendente?\n\n1 - Menu Inicial\n2 - Falar com atendente",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "Erro_split_0_3_2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_3_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Apresentacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Erro_sr_0_3_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, menu inicial, menu"
+            }
+          ]
+        },
+        {
+          "next": "Atendimento",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Erro_sr_0_3_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, atendente, falar com atendente"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Erro_sr_0_3_2.inbound.Body}}",
+        "offset": {
+          "x": 80,
+          "y": 1350
+        }
+      }
+    },
+    {
+      "name": "Erro_sr_0_1_2",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "Erro_split_0_1_2",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "sem_resposta",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -580,
+          "y": 1130
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Me desculpe, não entendi. Por gentileza, coloque os números correspondentes para responder essa questão.   \n\nPosso ajudar em mais alguma coisa?\n1- Não, tudo perfeito!\n2 - Voltar para o menu inicial",
+        "timeout": "600"
+      }
+    },
+    {
+      "name": "Erro_split_0_1_2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "Erro_sr_0_1_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "Finalizacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": ["{{widgets.Erro_sr_0_1_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "1, um, não, n, nao, tudo perfeito, nao tudo perfeito, não tudo perfeito"
+            }
+          ]
+        },
+        {
+          "next": "Apresentacao",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": ["{{widgets.Erro_sr_0_1_2.inbound.Body}}"],
+              "type": "matches_any_of",
+              "value": "2, dois, menu inicial, menu"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Erro_sr_0_1_2.inbound.Body}}",
+        "offset": {
+          "x": -580,
+          "y": 1350
+        }
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}
